@@ -13,6 +13,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"log"
 )
 
 type ConnectionState struct {
@@ -89,7 +90,6 @@ func (c *Conn) handle(cmd string, arg string) {
 		c.WriteResponse(500, EnhancedCode{5, 5, 2}, "Speak up")
 		return
 	}
-
 	cmd = strings.ToUpper(cmd)
 	switch cmd {
 	case "SEND", "SOML", "SAML", "EXPN", "HELP", "TURN":
@@ -274,6 +274,7 @@ func (c *Conn) handleMail(arg string) {
 	if len(fromArgs) > 1 {
 		args, err := parseArgs(fromArgs[1:])
 		if err != nil {
+			log.Println("Recv MAIL(%s) err:%s",arg,err)
 			c.WriteResponse(501, EnhancedCode{5, 5, 4}, "Unable to parse MAIL ESMTP parameters")
 			return
 		}

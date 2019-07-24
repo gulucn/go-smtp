@@ -46,10 +46,14 @@ func parseArgs(args []string) (map[string]string, error) {
 			continue
 		}
 		m := strings.Split(arg, "=")
-		if len(m) != 2 {
+		arg_len := len(m)
+		if arg_len > 2 {
 			return nil, fmt.Errorf("Failed to parse arg string: %q", arg)
+		}else if arg_len == 1 {
+			argMap[strings.ToUpper(arg)] = "1"
+		}else{
+			argMap[strings.ToUpper(m[0])] = m[1]
 		}
-		argMap[strings.ToUpper(m[0])] = m[1]
 	}
 	return argMap, nil
 }
